@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bốc Túi Mù 8/3</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            position: relative; /* Để container nằm trên video */
+            overflow: hidden; /* Ẩn phần video thừa */
+        }
+        /* Định dạng video nền */
+        #background-video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            transform: translate(-50%, -50%);
+            object-fit: cover; /* Đảm bảo video phủ toàn màn hình */
+            z-index: -1; /* Đặt video phía sau nội dung */
+        }
+        .container {
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.9); /* Nền trắng mờ để dễ đọc */
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            width: 400px;
+            position: relative; /* Đảm bảo container nằm trên video */
+            z-index: 1; /* Đặt container phía trước video */
+        }
+        h1 {
+            color: #ff3399;
+            margin-bottom: 20px;
+        }
+        input[type="text"] {
+            padding: 10px;
+            font-size: 16px;
+            width: 200px;
+            margin-bottom: 20px;
+            border: 2px solid #ff66b2;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #ff66b2;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #ff3399;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 24px;
+            color: #333;
+        }
+        #giftList {
+            margin-top: 20px;
+            text-align: left;
+            font-size: 14px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <!-- Thêm video nền -->
+    <video id="background-video" autoplay muted loop>
+        <source src="background.mp4" type="video/mp4">
+        Trình duyệt của bạn không hỗ trợ video.
+    </video>
+
+    <div class="container">
+        <h1>Chào Mừng Ngày 8/3!</h1>
+        <p>Nhập tên của bạn và bốc túi mù nhé!</p>
+        <input type="text" id="nameInput" placeholder="Nhập tên của bạn">
+        <br>
+        <button onclick="drawGift()">Bốc Túi Mù</button>
+        <div id="result"></div>
+        <div id="giftList"></div>
+    </div>
+
+    <script>
+        // Danh sách phần thưởng với trọng số (weight)
+        const gifts = [
+            { item: "💐 Một bó hoa tươi thắm", weight: 5 },
+            { item: "🎁 2,000 VNG", weight: 15 },
+            { item: "🎁 3,000 VNG", weight: 15 },
+            { item: "🎁 5,000 VNG", weight: 15 },
+            { item: "🎁 10,000 VNG", weight: 10 },
+            { item: "🎁 20,000 VNG", weight: 9 },
+            { item: "🎁 50,000 VNG", weight: 8 }
+        ];
+        const participants = {}; // Object để theo dõi người đã tham gia
+
+        // Tính tổng trọng số
+        const totalWeight = gifts.reduce((sum, gift) => sum + gift.weight, 0);
+
+        // Hiển thị danh sách phần thưởng và xác suất khi tải trang
+        window.onload = function() {
+            displayGiftList();
+        };
+
+        function drawGift() {
+            const name = document.getElementById("nameInput").value.trim();
+            if (!name) {
+                alert("Vui lòng nhập tên của bạn trước khi bốc thăm!");
+                return;
+            }
+
+            // Kiểm tra xem người này đã tham gia chưa
+            if (participants[name]) {
+                alert("Bạn đã bốc thăm rồi! Mỗi người chỉ được bốc 1 lần.");
+                document.getElementById("result").innerHTML = `Kết quả của ${name}: ${participants[name]}!`;
+                return;
+            }
+
+            // Chọn phần thưởng dựa trên trọng số
+            const gift = weightedRandom(gifts);
+            const resultText = `Chúc mừng ${name}! Bạn nhận được: ${gift}!`;
+            document.getElementById("result").innerHTML = resultText;
+
+            // Lưu kết quả của người tham gia
+            participants[name] = gift;
+        }
+
+        function weightedRandom(gifts) {
+            const randomNum = Math.random() * totalWeight;
+            let weightSum = 0;
+
+            for (const gift of gifts) {
+                weightSum += gift.weight;
+                if (randomNum <= weightSum) {
+                    return gift.item;
+                }
+            }
+        }
+
+        function displayGiftList() {
+            const giftListDiv = document.getElementById("giftList");
+            let listHTML = "<strong>Các phần thưởng có thể nhận:</strong><br>";
+            gifts.forEach(gift => {
+                const probability = ((gift.weight / totalWeight) * 100).toFixed(2);
+                listHTML += `${gift.item} - Xác suất: ${probability}%<br>`;
+            });
+            giftListDiv.innerHTML = listHTML;
+        }
+    </script>
+</body>
+</html>

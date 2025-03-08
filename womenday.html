@@ -12,21 +12,11 @@
             align-items: center;
             height: 100vh;
             margin: 0;
-            position: relative; /* Để container nằm trên video */
-            overflow: hidden; /* Ẩn phần video thừa */
-        }
-        /* Định dạng video nền */
-        #background-video {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            min-width: 100%;
-            min-height: 100%;
-            width: auto;
-            height: auto;
-            transform: translate(-50%, -50%);
-            object-fit: cover; /* Đảm bảo video phủ toàn màn hình */
-            z-index: -1; /* Đặt video phía sau nội dung */
+            /* Sử dụng ảnh nền từ máy tính */
+            background-image: url('bg.png'); /* Thay tên file ảnh của bạn vào đây */
+            background-size: cover; /* Đảm bảo ảnh phủ toàn bộ nền */
+            background-position: center; /* Căn giữa ảnh */
+            background-repeat: no-repeat; /* Không lặp lại ảnh */
         }
         .container {
             text-align: center;
@@ -35,8 +25,6 @@
             border-radius: 15px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
             width: 400px;
-            position: relative; /* Đảm bảo container nằm trên video */
-            z-index: 1; /* Đặt container phía trước video */
         }
         h1 {
             color: #ff3399;
@@ -77,12 +65,6 @@
     </style>
 </head>
 <body>
-    <!-- Thêm video nền -->
-    <video id="background-video" autoplay muted loop>
-        <source src="background.mp4" type="video/mp4">
-        Trình duyệt của bạn không hỗ trợ video.
-    </video>
-
     <div class="container">
         <h1>Chào Mừng Ngày 8/3!</h1>
         <p>Nhập tên của bạn và bốc túi mù nhé!</p>
@@ -102,7 +84,7 @@
             { item: "🎁 5,000 VNG", weight: 15 },
             { item: "🎁 10,000 VNG", weight: 10 },
             { item: "🎁 20,000 VNG", weight: 9 },
-            { item: "🎁 50,000 VNG", weight: 8 }
+            { item: "🎁 50,000 VNG", weight: 1 }
         ];
         const participants = {}; // Object để theo dõi người đã tham gia
 
